@@ -1,6 +1,6 @@
 name: amazon_image
 description: widget to display image from amazon
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/sakushin-udemy/amazon_image
 
 environment:
@@ -32,12 +32,15 @@ flutter:
     # then add platforms following the instruction here:
     # https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms
     # -------------------
-      some_platform:
-        pluginClass: somePluginClass
+      android:
+        package: dev.sakushin.amazon_image
+        pluginClass: AmazonImagePlugin
+      ios:
+        pluginClass: AmazonImagePlugin
     # -------------------
 
   # To add assets to your plugin package, add an assets section, like this:
-  assets:
+  #assets:
   #  - assets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

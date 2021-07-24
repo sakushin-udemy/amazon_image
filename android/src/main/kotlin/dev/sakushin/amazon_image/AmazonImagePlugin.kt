@@ -1,4 +1,4 @@
-package com.example.amazon_image
+package dev.sakushin.amazon_image
 
 import androidx.annotation.NonNull
 

@@ -1,3 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.example.amazon_image">
+  package="dev.sakushin.amazon_image">
 </manifest>

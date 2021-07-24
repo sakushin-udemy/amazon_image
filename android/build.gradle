@@ -1,4 +1,4 @@
-group 'com.example.amazon_image'
+group 'dev.sakushin.amazon_image'
 version '1.0-SNAPSHOT'
 
 buildscript {

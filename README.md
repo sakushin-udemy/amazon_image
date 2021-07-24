@@ -14,11 +14,11 @@ If our users buy the product outright, it will pay for the development of this p
 
 ![](screenshots/anime.gif)
 
-#Note
+## Note
 Unfortunately, not all images can be used. I was able to use images of books and major toys, but not images of minor toys or DVDs.
 Please make sure that the images you want to use will be displayed.
 
-#Usage
+## Usage
 First, let's check the asin.
 ![](screenshots/asin.gif)
 
@@ -67,4 +67,4 @@ AmazonImageSetting().setTrackingId(trackingId);
 ```
 
 ##  Contact
-If you have anything you want to inform me (@SakushinFlutter), such as suggestions to enhance this package or functionalities you want etc, feel free to make issues on GitHub or send messages on Twitter @SakushinFlutter.
+If you have anything you want to inform me (@SakushinFlutter), such as suggestions to enhance this package or functionalities you want etc, feel free to make issues on [GitHub](https://github.com/sakushin-udemy/amazon_image) or send messages on Twitter @SakushinFlutter.

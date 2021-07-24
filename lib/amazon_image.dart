@@ -47,6 +47,13 @@ class AmazonImage extends StatelessWidget {
   final bool isLaunchAfterDoubleTap;
   final bool isLaunchAfterLongTap;
 
+  /// AmazonImage is a widget to display an image from amazon.
+  ///
+  /// [asin] is a amazon's key to specify product.
+  /// Let's go to amazon's product page and check the url.
+  /// (Example)
+  /// https://www.amazon.com/gp/product/B003O2SHKG?pf_rd_r ..................
+  ///  asin must be "B003O2SHKG"
   AmazonImage(
     this.asin, {
     Key? key,
@@ -117,10 +124,12 @@ class AmazonImage extends StatelessWidget {
     );
   }
 
+  /// Method for lanching to amazon web page.
   void onLaunch() {
     _launchURL();
   }
 
+  /// Get amazon's image url.
   String getImageUrl() {
     String imageSizeKey = imageSize == ImageSize.Large
         ? kLargeKey
@@ -130,6 +139,7 @@ class AmazonImage extends StatelessWidget {
     return 'https://images-na.ssl-images-amazon.com/images/P/$asin.$countryCode.$imageSizeKey.jpg';
   }
 
+  /// Get amazon's product url.
   String getLinkUrl() {
     var trackingId = setting.AmazonImageSetting().trackingId;
     // https://www.amazon.co.jp/gp/product/B00N8JJCNQ?tag=flutter_amazon_image-22

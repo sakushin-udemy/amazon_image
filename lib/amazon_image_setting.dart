@@ -1,5 +1,6 @@
 import 'dart:io';
 
+/// Country key
 enum CountryKey {
   USA,
   UK,
@@ -16,6 +17,7 @@ enum CountryKey {
   Australia,
 }
 
+/// Map for this plugin's country key to dart's country code
 /// https://pub.dev/documentation/locales/latest/locales/Locale-class.html
 const Map<String, CountryKey> countryLocale = {
   'US': CountryKey.USA,
@@ -33,6 +35,7 @@ const Map<String, CountryKey> countryLocale = {
   'AU': CountryKey.Australia,
 };
 
+/// Map for amazon's domain.
 /// https://en.wikipedia.org/wiki/Amazon_(company)
 const Map<CountryKey, String> domains = {
   CountryKey.USA: 'amazon.com',
@@ -50,6 +53,7 @@ const Map<CountryKey, String> domains = {
   CountryKey.Australia: 'amazon.com.au',
 };
 
+/// Map for amazon's contry code.
 const Map<CountryKey, String> codes = {
   CountryKey.USA: '01',
   CountryKey.UK: '02',
@@ -74,16 +78,19 @@ class AmazonImageSetting {
   get defaultCountry => _defaultCountry;
 
   static final AmazonImageSetting _instance = AmazonImageSetting._internal();
+
+  /// Set for amazon_image's globals setting.
   factory AmazonImageSetting() {
     return _instance;
   }
   AmazonImageSetting._internal() {
     var localName = Platform.localeName;
-    if (3 < localName.length){
+    if (3 < localName.length) {
       _defaultCountry = localName.substring(3);
     }
   }
 
+  /// set amazon associates' Tracking ID
   void setTrackingId(String trackingId) {
     _trackingId = trackingId;
   }

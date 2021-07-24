@@ -2,8 +2,4 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   // https://www.amazon.co.jp/gp/product/B003O2SHKG?&tag=flutter_amazon_image-22
-
-  group('getLinkUrl', () {
-    test('testName', () async {});
-  });
 }

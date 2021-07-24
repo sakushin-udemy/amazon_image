@@ -68,7 +68,7 @@ const Map<CountryKey, String> codes = {
 
 class AmazonImageSetting {
   String _trackingId = 'flutter_amazon_image-22';
-  String _defaultCountry = Platform.localeName.substring(3);
+  String _defaultCountry = 'US';
 
   get trackingId => _trackingId;
   get defaultCountry => _defaultCountry;
@@ -77,7 +77,12 @@ class AmazonImageSetting {
   factory AmazonImageSetting() {
     return _instance;
   }
-  AmazonImageSetting._internal();
+  AmazonImageSetting._internal() {
+    var localName = Platform.localeName;
+    if (3 < localName.length){
+      _defaultCountry = localName.substring(3);
+    }
+  }
 
   void setTrackingId(String trackingId) {
     _trackingId = trackingId;

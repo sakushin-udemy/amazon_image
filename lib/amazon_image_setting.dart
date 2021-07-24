@@ -75,6 +75,7 @@ class AmazonImageSetting {
   String _defaultCountry = 'US';
 
   get trackingId => _trackingId;
+
   get defaultCountry => _defaultCountry;
 
   static final AmazonImageSetting _instance = AmazonImageSetting._internal();
@@ -83,6 +84,7 @@ class AmazonImageSetting {
   factory AmazonImageSetting() {
     return _instance;
   }
+
   AmazonImageSetting._internal() {
     var localName = Platform.localeName;
     if (3 < localName.length) {

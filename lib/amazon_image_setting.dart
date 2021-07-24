@@ -86,6 +86,13 @@ class AmazonImageSetting {
   }
 
   AmazonImageSetting._internal() {
+    try {
+      if (!Platform.isAndroid && !Platform.isIOS) {
+        return;
+      }
+    } catch (e) {
+      return;
+    }
     var localName = Platform.localeName;
     if (3 < localName.length) {
       _defaultCountry = localName.substring(3);

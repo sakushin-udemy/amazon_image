@@ -95,15 +95,6 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FutureBuilder<AmazonImage>(
-                  future: _prechaceCompleter.future,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<AmazonImage> snapshot) {
-                    if (snapshot.hasData) {
-                      return snapshot.data!;
-                    }
-                    return CircularProgressIndicator();
-                  }),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Text('double tap: launch, imageSize:middle (default)'),

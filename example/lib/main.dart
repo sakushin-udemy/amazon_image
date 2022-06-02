@@ -67,8 +67,8 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void didUpdateWidget(Home oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     final AmazonImage preacache = AmazonImage(
       asin,
@@ -77,7 +77,9 @@ class _HomeState extends State<Home> {
     );
 
     if (!_prechaceCompleter.isCompleted) {
-      preacache.future!.then((_) => _prechaceCompleter.complete(preacache));
+      preacache.future!.then((_) {
+        _prechaceCompleter.complete(preacache);
+      });
     }
   }
 
@@ -93,6 +95,15 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              FutureBuilder<AmazonImage>(
+                  future: _prechaceCompleter.future,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<AmazonImage> snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!;
+                    }
+                    return CircularProgressIndicator();
+                  }),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Text('double tap: launch, imageSize:middle (default)'),

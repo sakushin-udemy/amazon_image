@@ -164,7 +164,8 @@ class AmazonImage extends StatelessWidget {
     assert(functionBeforeLaunch == null || this.context != null,
         'context must be not null when function is called before lanuch');
 
-    if (await urlLancher.canLaunch(_linkUrl)) {
+    Uri uri = Uri.parse(_linkUrl);
+    if (await urlLancher.canLaunchUrl(uri)) {
       if (functionBeforeLaunch != null) {
         var result = await functionBeforeLaunch!(context!);
         if (!result) {
@@ -172,7 +173,7 @@ class AmazonImage extends StatelessWidget {
         }
       }
 
-      if (await urlLancher.launch(_linkUrl)) {
+      if (await urlLancher.launchUrl(uri)) {
         if (functionAfterLaunch != null) {
           functionAfterLaunch!();
         }

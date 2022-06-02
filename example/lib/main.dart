@@ -76,8 +76,9 @@ class _HomeState extends State<Home> {
       prechache: true,
     );
 
-    preacache.future!
-        .whenComplete(() => _prechaceCompleter.complete(preacache));
+    if (!_prechaceCompleter.isCompleted) {
+      preacache.future!.then((_) => _prechaceCompleter.complete(preacache));
+    }
   }
 
   @override

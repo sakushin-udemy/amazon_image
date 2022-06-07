@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLancher;
 
+import 'amazon_image_holder.dart';
 import 'amazon_image_setting.dart' as setting;
 
 typedef FunctionBeforeLaunch = Future<bool> Function(BuildContext context);
@@ -46,11 +47,7 @@ class AmazonImage extends StatelessWidget {
   final bool isLaunchAfterDoubleTap;
   final bool isLaunchAfterLongTap;
 
-  final bool prechache;
-
-  late final Image _image;
-  late final Future<void>? _futurePrechache;
-  Future<void>? get future => _futurePrechache;
+  final AmazonImageHolder? holder;
 
   /// AmazonImage is a widget to display an image from amazon.
   ///
@@ -75,7 +72,7 @@ class AmazonImage extends StatelessWidget {
     this.isLaunchAfterTap = false,
     this.isLaunchAfterDoubleTap = true,
     this.isLaunchAfterLongTap = false,
-    this.prechache = false,
+    this.holder,
   }) : super(key: key) {
     assert(onTap == null || !isLaunchAfterTap,
         'onTap must be null when isLaunchAfterTap is true');
@@ -83,8 +80,6 @@ class AmazonImage extends StatelessWidget {
         'onDoubleTap must be null when isLaunchAfterDoubleTap is true');
     assert(onLongTap == null || !isLaunchAfterLongTap,
         'onLongTap must be null when isLaunchAfterLongTap is true');
-    assert(!prechache || context != null,
-        'When prechache is ture, contect must not be null');
 
     setting.CountryKey countryKey =
         setting.countryLocale[setting.AmazonImageSetting().defaultCountry] ??
@@ -97,22 +92,18 @@ class AmazonImage extends StatelessWidget {
     } else {
       _linkUrl = linkUrl;
     }
-
-    _image = Image.network(
-      getImageUrl(),
-      fit: boxFit,
-      alignment: offset,
-    );
-
-    if (prechache) {
-      _futurePrechache = precacheImage(_image.image, context!);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    NetworkImage image = _checkHolder(asin) ?? NetworkImage(getImageUrl());
+
     return GestureDetector(
-      child: _image,
+      child: Image(
+        image: image,
+        fit: boxFit,
+        alignment: offset,
+      ),
       onTap: () {
         if (onTap != null) {
           onTap!();
@@ -136,6 +127,10 @@ class AmazonImage extends StatelessWidget {
         }
       },
     );
+  }
+
+  NetworkImage? _checkHolder(String asin) {
+    return holder?.getImage(asin);
   }
 
   /// Method for lanching to amazon web page.

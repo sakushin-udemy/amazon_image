@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:amazon_image/amazon_image.dart';
+import 'package:amazon_image/amazon_image_holder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -57,7 +58,8 @@ class _HomeState extends State<Home> {
 
   AmazonImage _amazonImage = AmazonImage(asin);
 
-  Completer<AmazonImage> _prechaceCompleter = Completer();
+  Completer<void> _prechaceCompleter = Completer();
+  late AmazonImageHolder holder;
 
   @override
   void initState() {
@@ -70,15 +72,11 @@ class _HomeState extends State<Home> {
   void didUpdateWidget(Home oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    final AmazonImage preacache = AmazonImage(
-      asin,
-      context: context,
-      prechache: true,
-    );
-
-    if (!_prechaceCompleter.isCompleted) {
-      preacache.future!.then((_) => _prechaceCompleter.complete(preacache));
-    }
+    holder = AmazonImageHolder(context);
+    holder.load([asin]).whenComplete(() {
+      print('prechach done');
+      _prechaceCompleter.complete();
+    });
   }
 
   @override
@@ -179,12 +177,16 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Text('precacheImage'),
               ),
-              FutureBuilder<AmazonImage>(
+              FutureBuilder<void>(
                   future: _prechaceCompleter.future,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<AmazonImage> snapshot) {
-                    if (snapshot.hasData) {
-                      return snapshot.data!;
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    print('status ${snapshot.connectionState}');
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return AmazonImage(
+                        asin,
+                        holder: holder,
+                      );
                     }
                     return CircularProgressIndicator();
                   }),

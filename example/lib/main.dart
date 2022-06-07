@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'nn_intl.dart';
 
 const asin = 'B003O2SHKG';
+const flutters = ['B003HGGHTW', 'B003JBHP4G', 'B00408ANAK', 'B07FK68VVB'];
 
 void main() {
   runApp(MyApp());
@@ -69,12 +70,10 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void didUpdateWidget(Home oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     holder = AmazonImageHolder(context);
-    holder.load([asin]).whenComplete(() {
-      print('prechach done');
+    holder.load(flutters).whenComplete(() {
       _prechaceCompleter.complete();
     });
   }
@@ -183,9 +182,14 @@ class _HomeState extends State<Home> {
                       (BuildContext context, AsyncSnapshot<void> snapshot) {
                     print('status ${snapshot.connectionState}');
                     if (snapshot.connectionState == ConnectionState.done) {
-                      return AmazonImage(
-                        asin,
-                        holder: holder,
+                      return Row(
+                        children: [
+                          for (var flutter in flutters)
+                            AmazonImage(
+                              flutter,
+                              holder: holder,
+                            ),
+                        ],
                       );
                     }
                     return CircularProgressIndicator();

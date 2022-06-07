@@ -1,6 +1,6 @@
 name: amazon_image
 description: widget to display image from amazon
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/sakushin-udemy/amazon_image
 
 environment:

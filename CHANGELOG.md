@@ -9,3 +9,6 @@ Support precacheImage.
 
 ## 0.0.4
 change usage of precacheImage.
+
+## 0.0.5
+add the function for clear cache

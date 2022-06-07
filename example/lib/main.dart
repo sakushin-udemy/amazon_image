@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:amazon_image/amazon_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'nn_intl.dart';
 
 const asin = 'B003O2SHKG';
@@ -56,11 +57,30 @@ class _HomeState extends State<Home> {
 
   AmazonImage _amazonImage = AmazonImage(asin);
 
+  Completer<AmazonImage> _prechaceCompleter = Completer();
+
   @override
   void initState() {
     super.initState();
 
     controller = new TextEditingController(text: _asin);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final AmazonImage preacache = AmazonImage(
+      asin,
+      context: context,
+      prechache: true,
+    );
+
+    if (!_prechaceCompleter.isCompleted) {
+      preacache.future!.then((_) {
+        _prechaceCompleter.complete(preacache);
+      });
+    }
   }
 
   @override
@@ -157,6 +177,19 @@ class _HomeState extends State<Home> {
                 asin,
                 imageSize: ImageSize.Large,
               ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                child: Text('precacheImage'),
+              ),
+              FutureBuilder<AmazonImage>(
+                  future: _prechaceCompleter.future,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<AmazonImage> snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!;
+                    }
+                    return CircularProgressIndicator();
+                  }),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Text('loadImage'),

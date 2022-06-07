@@ -4,9 +4,8 @@
 // directory. You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLancher;
 
 import 'amazon_image_setting.dart' as setting;
@@ -47,6 +46,12 @@ class AmazonImage extends StatelessWidget {
   final bool isLaunchAfterDoubleTap;
   final bool isLaunchAfterLongTap;
 
+  final bool prechache;
+
+  late final Image _image;
+  late final Future<void>? _futurePrechache;
+  Future<void>? get future => _futurePrechache;
+
   /// AmazonImage is a widget to display an image from amazon.
   ///
   /// [asin] is a amazon's key to specify product.
@@ -70,6 +75,7 @@ class AmazonImage extends StatelessWidget {
     this.isLaunchAfterTap = false,
     this.isLaunchAfterDoubleTap = true,
     this.isLaunchAfterLongTap = false,
+    this.prechache = false,
   }) : super(key: key) {
     assert(onTap == null || !isLaunchAfterTap,
         'onTap must be null when isLaunchAfterTap is true');
@@ -77,6 +83,8 @@ class AmazonImage extends StatelessWidget {
         'onDoubleTap must be null when isLaunchAfterDoubleTap is true');
     assert(onLongTap == null || !isLaunchAfterLongTap,
         'onLongTap must be null when isLaunchAfterLongTap is true');
+    assert(!prechache || context != null,
+        'When prechache is ture, contect must not be null');
 
     setting.CountryKey countryKey =
         setting.countryLocale[setting.AmazonImageSetting().defaultCountry] ??
@@ -89,16 +97,22 @@ class AmazonImage extends StatelessWidget {
     } else {
       _linkUrl = linkUrl;
     }
+
+    _image = Image.network(
+      getImageUrl(),
+      fit: boxFit,
+      alignment: offset,
+    );
+
+    if (prechache) {
+      _futurePrechache = precacheImage(_image.image, context!);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Image.network(
-        getImageUrl(),
-        fit: boxFit,
-        alignment: offset,
-      ),
+      child: _image,
       onTap: () {
         if (onTap != null) {
           onTap!();
@@ -150,7 +164,8 @@ class AmazonImage extends StatelessWidget {
     assert(functionBeforeLaunch == null || this.context != null,
         'context must be not null when function is called before lanuch');
 
-    if (await urlLancher.canLaunch(_linkUrl)) {
+    Uri uri = Uri.parse(_linkUrl);
+    if (await urlLancher.canLaunchUrl(uri)) {
       if (functionBeforeLaunch != null) {
         var result = await functionBeforeLaunch!(context!);
         if (!result) {
@@ -158,7 +173,7 @@ class AmazonImage extends StatelessWidget {
         }
       }
 
-      if (await urlLancher.launch(_linkUrl)) {
+      if (await urlLancher.launchUrl(uri)) {
         if (functionAfterLaunch != null) {
           functionAfterLaunch!();
         }

@@ -30,4 +30,8 @@ class AmazonImageHolder {
   NetworkImage? getImage(String asin) {
     return _holder[asin];
   }
+
+  void clear() {
+    _holder.clear();
+  }
 }

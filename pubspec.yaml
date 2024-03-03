@@ -1,6 +1,6 @@
 name: amazon_image
 description: widget to display image from amazon
-version: 0.0.4
+version: 0.0.6
 homepage: https://github.com/sakushin-udemy/amazon_image
 
 environment:
@@ -9,6 +9,8 @@ environment:
 
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_web_plugins:
     sdk: flutter
   url_launcher: ^6.2.5
 

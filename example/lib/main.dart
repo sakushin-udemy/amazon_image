@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:amazon_image/amazon_image.dart';
+import 'package:amazon_image/amazon_image_holder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 const asin = 'B003O2SHKG';
+const flutters = ['B003HGGHTW', 'B003JBHP4G', 'B00408ANAK', 'B07FK68VVB'];
 
 void main() {
   runApp(MyApp());
@@ -54,7 +56,8 @@ class _HomeState extends State<Home> {
 
   AmazonImage _amazonImage = AmazonImage(asin);
 
-  Completer<AmazonImage> _prechaceCompleter = Completer();
+  Completer<void> _prechaceCompleter = Completer();
+  late AmazonImageHolder holder;
 
   @override
   void initState() {
@@ -66,18 +69,10 @@ class _HomeState extends State<Home> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    final AmazonImage preacache = AmazonImage(
-      asin,
-      context: context,
-      prechache: true,
-    );
-
-    if (!_prechaceCompleter.isCompleted) {
-      preacache.future!.then((_) {
-        _prechaceCompleter.complete(preacache);
-      });
-    }
+    holder = AmazonImageHolder(context);
+    holder.load(flutters).whenComplete(() {
+      _prechaceCompleter.complete();
+    });
   }
 
   @override
@@ -178,12 +173,21 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Text('precacheImage'),
               ),
-              FutureBuilder<AmazonImage>(
+              FutureBuilder<void>(
                   future: _prechaceCompleter.future,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<AmazonImage> snapshot) {
-                    if (snapshot.hasData) {
-                      return snapshot.data!;
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    print('status ${snapshot.connectionState}');
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return Row(
+                        children: [
+                          for (var flutter in flutters)
+                            AmazonImage(
+                              flutter,
+                              holder: holder,
+                            ),
+                        ],
+                      );
                     }
                     return CircularProgressIndicator();
                   }),

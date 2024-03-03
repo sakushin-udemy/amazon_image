@@ -4,8 +4,6 @@ import 'package:amazon_image/amazon_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'nn_intl.dart';
-
 const asin = 'B003O2SHKG';
 
 void main() {
@@ -30,7 +28,6 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
-        NnMaterialLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale('en', 'US'),
